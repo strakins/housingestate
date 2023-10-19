@@ -6,11 +6,11 @@ import { signInStart, signInSuccess, signInFailure } from '../redux/user/userSli
 const SignIn = () => {
 
   const [formData, setFormData] = useState({});
-  const {loading, error} = useSelector(state => state.user)
+  const {loading, error} = useSelector((state) => state.user)
   // const [error, setError] = useState(null);
   // const [loading, setLoading] = useState(false);
-  const dispatch = useDispatch();
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const handleChange = (e) => {
     setFormData({
@@ -22,7 +22,7 @@ const SignIn = () => {
   
   const handleSubmit = async (e) => {
     try {
-      dispatch(signInStart)
+      dispatch(signInStart())
       e.preventDefault();
       const res = await fetch('/api/auth/login', {
         method: 'POST',
@@ -40,7 +40,7 @@ const SignIn = () => {
       }
       // setLoading(false)
       // setError(null)
-      dispatch(signInSuccess)
+      dispatch(signInSuccess(data))
       navigate('/')
     } catch (err) {
       // setLoading(false);
