@@ -8,6 +8,7 @@ import SignUp from './Pages/SignUp'
 
 const Routing = () => {
   return (
+    
     <Routes>
         <Route path='/' element={ < Home /> } />
         <Route path='/profile' element={ < Profile /> } />
@@ -15,6 +16,7 @@ const Routing = () => {
         <Route path='/login' element={ < SignIn /> } />
         <Route path='/signup' element={ < SignUp /> } />
     </Routes>
+   
   )
 }
 
