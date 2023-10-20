@@ -2,7 +2,11 @@
 
 const Profile = () => {
   return (
-    <div>Profile</div>
+    <section className="text-white">
+      <p>Profile</p>  
+
+      <button >Sign Out</button>
+    </section>
   )
 }
 
