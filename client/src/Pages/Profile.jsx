@@ -1,6 +1,11 @@
 import { useSelector } from "react-redux";
 import { useEffect, useRef, useState } from "react";
-import { getDownloadURL, getStorage, ref, uploadBytesResumable } from 'firebase/storage';
+import {
+  getDownloadURL, 
+  getStorage, 
+  ref, 
+  uploadBytesResumable 
+} from 'firebase/storage';
 import { app } from "../firebase";
 
 const Profile = () => {
@@ -10,8 +15,8 @@ const Profile = () => {
   const [file, setFile] = useState(undefined);
   const [filepercent, setFilePercentage] = useState(0);
   const [ fileUploadError, setFileUploadError ] = useState(null);
-  const [ formData, setFormData ] = useState({})
-
+  const [ formData, setFormData ] = useState({});
+  
 
   useEffect(() => {
     if(file) {
@@ -28,19 +33,19 @@ const Profile = () => {
     uploadTask.on('state_changed', (snapshot) => {
         const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
         setFilePercentage(Math.round(progress));
-      });
+      },
       (error) => {
-        setFileUploadError(true)
-      };
+        setFileUploadError(true);
+      },
       () => {
         getDownloadURL(uploadTask.snapshot.ref)
-        .then ( 
-          (downloadUrl) => {
-            setFormData({ ...formData, avatar: downloadUrl})
-          }
-        )
+        .then ((downloadUrl) => 
+          setFormData({ ...formData, avatar: downloadUrl})
+        );
       }
+    )
   }
+  
 
 
   return (
@@ -49,11 +54,32 @@ const Profile = () => {
       <form className="flex flex-col gap-4">
         <input 
           type="file" 
-          onChange={(e) => setFile(e.target.files[0])} ref={imgRef} 
+          onChange={(e) => setFile(e.target.files[0])} 
+          ref={imgRef} 
           hidden 
           accept="image/*" 
         />
-        <img src={currentUser.avatar} onClick={() => imgRef.current.click()} alt="profile-photo" className="w-24 self-center h-24  cursor-pointer object-cover rounded-full" />
+        <img 
+          src={formData.avatar || currentUser.avatar} 
+          onClick={() => imgRef.current.click()} 
+          alt="profile-photo" 
+          className="w-24 self-center h-24  cursor-pointer object-cover rounded-full" 
+        />
+        <p className="self-center">
+          { fileUploadError ? 
+            <p className="text-red-400 text-md">Error Image - Upload Image must be less than 2mb</p>
+            : 
+              filepercent > 0 && filepercent < 100 ? (
+                <p className="text-blue-200 text-md">{`Uploading ${filepercent}`}</p> 
+              ) :
+                filepercent === 100 ? (
+                  <p className="text-green-500 text-md">Image Successfully Uploaded!</p>
+                ) : (
+                  ""
+                )
+              
+            }
+        </p>
         <input type="text" id="username" placeholder='Username'className="p-3 border rounded-lg placeholder:text-black"  />
         <input type="email" id="email" placeholder="Email" className="p-3 border rounded-lg placeholder:text-black"  />
         <input type="text" id="password" placeholder='password' className="p-3 border rounded-lg placeholder:text-black"  />
